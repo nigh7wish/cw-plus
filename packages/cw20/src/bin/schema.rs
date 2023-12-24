@@ -3,11 +3,15 @@ use std::fs::create_dir_all;
 
 use cosmwasm_schema::{export_schema, remove_schemas, schema_for};
 
+// Import message types from the new cw20 package
 use cw20::{
     AllAccountsResponse, AllAllowancesResponse, AllowanceResponse, BalanceResponse, Cw20ExecuteMsg,
     Cw20QueryMsg, Cw20ReceiveMsg, DownloadLogoResponse, MarketingInfoResponse, MinterResponse,
     TokenInfoResponse,
 };
+
+// Import message types from your old cw20-base contract
+use cw20_base::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     let mut out_dir = current_dir().unwrap();
@@ -15,6 +19,7 @@ fn main() {
     create_dir_all(&out_dir).unwrap();
     remove_schemas(&out_dir).unwrap();
 
+    // Export schemas for new cw20 package messages
     export_schema(&schema_for!(Cw20ExecuteMsg), &out_dir);
     export_schema(&schema_for!(Cw20QueryMsg), &out_dir);
     export_schema(&schema_for!(Cw20ReceiveMsg), &out_dir);
@@ -26,4 +31,12 @@ fn main() {
     export_schema(&schema_for!(MarketingInfoResponse), &out_dir);
     export_schema(&schema_for!(AllAllowancesResponse), &out_dir);
     export_schema(&schema_for!(AllAccountsResponse), &out_dir);
+
+    // Export schemas for your old cw20-base contract messages
+    export_schema(&schema_for!(InstantiateMsg), &out_dir);
+    export_schema(&schema_for!(ExecuteMsg), &out_dir);
+    export_schema(&schema_for!(QueryMsg), &out_dir);
+
+    // Add any additional custom message types specific to your contract
+    // export_schema(&schema_for!(YourCustomMsg), &out_dir);
 }
